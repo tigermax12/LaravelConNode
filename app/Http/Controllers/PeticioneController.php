@@ -9,6 +9,7 @@ use App\Models\File;
 use App\Models\Categoria;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\RedirectResponse;
 
 class PeticioneController extends Controller
 {
@@ -77,7 +78,7 @@ class PeticioneController extends Controller
         } catch (\Exception $exception) {
             return back()->withError($exception->getMessage())->withInput();
         }
-        return view('peticiones.peticionesfirmadas', compact('peticiones'));
+        return view('peticiones.index', compact('peticiones'));
     }
 
 
@@ -162,7 +163,6 @@ class PeticioneController extends Controller
         }
         return redirect()->back();
     }
-
     public function cambiarEstado(Request $request, $id)
     {
         $peticion = Peticione::query()->findOrFail($id);

@@ -1,6 +1,9 @@
 @extends('layouts.public')
 @section('content')
     <div class="container">
+        @if (session('error'))
+            <div class="alert alert-danger">{{session('error')}}</div>
+        @endif
         <h1>Crear Nueva Petición</h1>
         <form action="{{ route('peticiones.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
