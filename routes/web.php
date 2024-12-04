@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\PeticioneController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,8 +17,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');*/
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 Route::get('/', [PagesController::class, 'home']);
 Route::get('/', [PagesController::class, 'home'])->name('home');
@@ -34,4 +45,4 @@ Route::controller(PeticioneController::class)->group(function () {
     Route::post('peticiones/firmar/{id}', 'firmar')->name('peticiones.firmar');
     Route::get('peticiones/edit/{id}', 'update')->name('peticiones.edit');
 });
-
+require __DIR__.'/auth.php';

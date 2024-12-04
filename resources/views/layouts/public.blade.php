@@ -21,26 +21,28 @@
                 <li class="nav-item">
                     <a class="nav-link fs-4 m-2" href="{{ route('peticiones.index') }}">Peticiones</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link fs-4 m-2" href="{{ route('peticiones.create') }}">Inicia una petición</a>
-                </li>
-                {{--@if (Auth::check())--}}
+                @if (Auth::check())
                     <li class="nav-item">
                         <a class="nav-link fs-4 m-2" href="{{ route('peticiones.mine') }}">Mis peticiones</a>
                     </li>
                 <li class="nav-item">
                     <a class="nav-link fs-4 m-2" href="{{ route('peticiones.create') }}">Crear peticiones</a>
                 </li>
+                    <a class="nav-link fs‐4 m‐2 link-danger" href="{{route('logout')}}"
+                       onclick="event.preventDefault();document.getElementById('logout').submit();">Cerrar sesión</a>
+                    <form method="POST" id="logout" action="{{route('logout')}}">
+                        @csrf
+                    </form>
                     <!-- Agregar más enlaces para usuarios autenticados aquí-->
-                {{--@else--}}
+                @else
                     <li class="nav-item">
                     <li class="nav-item">
-                        <a class="nav-link fs-5 m-2 link-danger" href="">Register</a>
+                        <a class="nav-link fs-5 m-2 link-danger" href="{{route('register')}}">Register</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-5 m-2 link-danger" href="">Login</a>
+                        <a class="nav-link fs-5 m-2 link-danger" href="{{route('login')}}">Login</a>
                     </li>
-                {{--@endif--}}
+                @endif
             </ul>
         </div>
     </div>

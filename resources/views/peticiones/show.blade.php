@@ -32,15 +32,20 @@
                     <div class="col-md-6 mb-4">
                         <div class="card">
                             <div class="card-body">
-                                <h6 class="card-title">Titulo: <?php echo htmlspecialchars($peticiones['titulo']); ?></h6>
-                                <p class="card-text">Descripcion: <?php echo htmlspecialchars($peticiones['descripcion']); ?></p>
-                                <p class="card-text">Destinatario: <?php echo htmlspecialchars($peticiones['destinatario']); ?></p>
-                                <p class="card-text">Firmantes: <?php echo htmlspecialchars($peticiones['firmantes']); ?></p>
-                                <p class="card-text">Estado: <?php echo htmlspecialchars($peticiones['estado']); ?></p>
-                                <p class="card-text">User_id: <?php echo htmlspecialchars($peticiones['user_id']); ?></p>
-                                <p class="card-text">Categoria_id: <?php echo htmlspecialchars($peticiones['categoria_id']); ?></p>
-                                <p class="card-text">Created_at: <?php echo htmlspecialchars($peticiones['created_at']); ?></p>
-                                <p class="card-text">Updated_at: <?php echo htmlspecialchars($peticiones['updated_at']); ?></p>
+                                <img src="{{asset('/peticiones\/').$peticion->file->file_path}}" alt="" width="100px" height="100px">
+                                <h6 class="card-title">Titulo: <?php echo htmlspecialchars($peticion['titulo']); ?></h6>
+                                <p class="card-text">Descripcion: <?php echo htmlspecialchars($peticion['descripcion']); ?></p>
+                                <p class="card-text">Destinatario: <?php echo htmlspecialchars($peticion['destinatario']); ?></p>
+                                <p class="card-text">Firmantes: <?php echo htmlspecialchars($peticion['firmantes']); ?></p>
+                                <p class="card-text">Estado: <?php echo htmlspecialchars($peticion['estado']); ?></p>
+                                <p class="card-text">User_id: <?php echo htmlspecialchars($peticion['user_id']); ?></p>
+                                <p class="card-text">Categoria_id: <?php echo htmlspecialchars($peticion['categoria_id']); ?></p>
+                                <p class="card-text">Created_at: <?php echo htmlspecialchars($peticion['created_at']); ?></p>
+                                <p class="card-text">Updated_at: <?php echo htmlspecialchars($peticion['updated_at']); ?></p>
+                                <form method="POST" action="{{ route('peticiones.firmar', $peticion->id) }}">
+                                    @csrf
+                                    <button>Firmar</button>
+                                </form>
                             </div>
                         </div>
                     </div>

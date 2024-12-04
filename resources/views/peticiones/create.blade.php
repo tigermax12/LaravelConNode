@@ -2,19 +2,19 @@
 @section('content')
     <div class="container">
         <h1>Crear Nueva Petición</h1>
-        <form action="{{ route('peticiones.store') }}" method="POST">
+        <form action="{{ route('peticiones.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
                 <label for="titulo">Título</label>
-                <input type="text" name="titulo" id="titulo" class="form-control" required>
+                <input type="text" name="titulo"  class="form-control @error('titulo') is-invalid @enderror" id="validationServer01" required>
             </div>
             <div class="form-group">
                 <label for="descripcion">Descripción</label>
-                <textarea name="descripcion" id="descripcion" class="form-control" rows="4" required></textarea>
+                <textarea name="descripcion" rows="4" class="form-control @error('descripcion') is-invalid @enderror" id="validationServer01" required></textarea>
             </div>
             <div class="form-group">
                 <label for="destinatario">Destinatario</label>
-                <input type="text" name="destinatario" id="destinatario" class="form-control" required>
+                <input type="text" name="destinatario" class="form-control @error('destinatario') is-invalid @enderror" id="validationServer01" required>
             </div>
             <div class="form-group">
                 <label for="categoria">Categoría</label>
@@ -23,6 +23,15 @@
                         <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
                     @endforeach
                 </select>
+            </div>
+            <div class="col-12">
+                <label class="uilabel-left form-element__label uilabel" for="304:343;a"><span>Sube una imagen</span>
+                <span class="required" title="obligatorio"></span>
+                </label>
+                <input type="file" id="file" name="file" class="form-control @error('file') is-invalid @enderror" placeholder="file" aria-required="true" >
+                @error('file')
+                <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
             </div>
             <button type="submit" class="btn btn-primary">Crear Petición</button>
         </form>
