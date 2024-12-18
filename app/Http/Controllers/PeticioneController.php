@@ -23,15 +23,16 @@ class PeticioneController extends Controller
 
     public function index(Request $request)
     {
-        $peticiones = Peticione::all();
+        $peticiones = Peticione::paginate(1);
         return view('peticiones.index', compact('peticiones'));
     }
 
     public function listMine(Request $request)
     {
         //parent::index()
-        $user = Auth::id();
-        $peticiones = Peticione::all()->where('user_id', $user);
+        $user = Auth::user();
+        $peticiones= $user->peticiones()->paginate(1);
+        //$peticiones = Peticione::paginate(1)->where('user_id', $user);
         return view('peticiones.mine', compact('peticiones'));
     }
 
@@ -74,7 +75,7 @@ class PeticioneController extends Controller
     {
         try {
             $user = Auth::user();
-            $peticiones = $user->firmas;
+            $peticiones = $user->firmas()->paginate(1);
         } catch (\Exception $exception) {
             return back()->withError($exception->getMessage())->withInput();
         }
@@ -122,27 +123,67 @@ class PeticioneController extends Controller
      */
     public function show($id)
     {
-
+        try{
         $peticion = Peticione::query()->findOrFail($id);
+        } catch (\Exception $exception) {
+            return back()->withErrors($exception->getMessage())->withInput();
+        }
         return view('peticiones.show', compact('peticion'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
-    {
-        $peticion = Peticione::query()->findOrFail($id);
-        $peticion->update($request->all());
-        return $peticion;
-    }
-
     public function create()
     {
         $categorias = Categoria::all();
         return view('peticiones.create', compact('categorias'));
     }
+    public function edit($id){
+        $peticion = Peticione::findOrFail($id);
+        $categorias = Categoria::all();
+        return view('peticiones.edit', compact('peticion', 'categorias'));
+    }
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'titulo' => 'required|max:255',
+            'descripcion' => 'required',
+            'destinatario' => 'required',
+            'categoria_id' => 'required|exists:categorias,id',
+            'file' => 'nullable|file', // El archivo es opcional pero debe ser válido
+        ]);
 
+        try {
+            // Buscar la petición existente
+            $peticion = Peticione::findOrFail($id);
+
+            // Actualizar los datos básicos
+            $peticion->titulo = $request->input('titulo');
+            $peticion->descripcion = $request->input('descripcion');
+            $peticion->destinatario = $request->input('destinatario');
+            $peticion->categoria_id = $request->input('categoria_id');
+
+            // Si se sube un nuevo archivo, manejarlo
+            if ($request->hasFile('file')) {
+                // Eliminar el archivo anterior si existe
+                if ($peticion->file) {
+                    $peticion->file->delete();
+                }
+                $res_file = $this->fileUpload($request, $peticion->id);
+            }
+
+            // Guardar la petición
+            if ($peticion->save()) {
+                return redirect()->route('peticiones.show', $peticion->id)
+                    ->with('success', 'La petición se actualizó correctamente.');
+            }
+
+            return back()->withError('Error al actualizar la petición.')->withInput();
+        } catch (\Exception $exception) {
+            return back()->withError('Ocurrió un error: ' . $exception->getMessage())->withInput();
+        }
+    }
     public function firmar(Request $request, $id)
     {
         try {
@@ -174,7 +215,9 @@ class PeticioneController extends Controller
     public function delete(Request $request, $id)
     {
         $peticion = Peticione::query()->findOrFail($id);
+        $peticion->firmas()->delete();
+        $peticion->file->delete();
         $peticion->delete();
-        return response()->json(['message' => 'Petición eliminada correctamente.']);
+        return $this->listMine($request);
     }
 }

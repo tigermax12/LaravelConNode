@@ -42,7 +42,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-    public function peticione(){
+    public function peticiones(){
         return $this->hasMany(Peticione::class);
     }
 

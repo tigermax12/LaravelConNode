@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\PeticioneController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::get('/', [PagesController::class, 'home']);
+//Route::get('/', [PagesController::class, 'home']);
 Route::get('/', [PagesController::class, 'home'])->name('home');
 Route::get('/users/firmas', [UserController::class, 'peticionesFirmadas'])->middleware('auth');
 Route::controller(PeticioneController::class)->group(function () {
@@ -43,6 +43,21 @@ Route::controller(PeticioneController::class)->group(function () {
     Route::delete('peticiones/{id}', 'delete')->name('peticiones.delete');
     Route::put('peticiones/{id}', 'update')->name('peticiones.update');
     Route::post('peticiones/firmar/{id}', 'firmar')->name('peticiones.firmar');
-    Route::get('peticiones/edit/{id}', 'update')->name('peticiones.edit');
+    Route::get('peticiones/edit/{id}', 'edit')->name('peticiones.edit');
 });
+Route::middleware('admin')->controller(\App\Http\Controllers\Admin\AdminPeticionesController::class)->group(function () {
+    Route::get('admin', 'index')->name('admin.home');
+Route::get('admin/peticiones/index', 'index')->name('adminpeticiones.index');
+Route::get('admin/peticiones/{id}', 'show')->name('adminpeticiones.show');
+Route::get('admin/peticion/add', 'create')->name('adminpeticiones.create');
+Route::get('admin/peticiones/edit/{id}', 'edit')->name('adminpeticiones.edit');
+Route::post('admin/peticiones', 'store')->name('adminpeticiones.store');
+Route::delete('admin/peticiones/{id}', 'delete')->name('adminpeticiones.delete');
+Route::put('admin/peticiones/{id}', 'update')->name('adminpeticiones.update');
+Route::put('admin/peticiones/estado/{id}', 'cambiarEstado')->name('adminpeticiones.estado');
+});
+Route::middleware('admin')->controller(\App\Http\Controllers\Admin\AdminUsersController::class)->group(function () {
+    Route::get('admin/users/index', 'index')->name('adminusers.index');
+});
+
 require __DIR__.'/auth.php';
