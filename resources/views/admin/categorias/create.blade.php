@@ -11,7 +11,7 @@
                 <label for="nombre">Nombre</label>
                 <input type="text" name="nombre"  class="form-control @error('nombre') is-invalid @enderror" id="validationServer01" required>
             </div>
-            <button type="submit" class="btn btn-primary">Crear Petición</button>
+            <button type="submit" class="btn btn-primary">Crear Categoria</button>
         </form>
     </div>
 

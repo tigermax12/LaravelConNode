@@ -8,7 +8,7 @@
         <div class="table-container">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4>Usuarios</h4>
-                <a href="#" class="btn btn-primary">New</a>
+                <a href="{{ route('adminusers.create') }}" class="btn btn-primary">New</a>
             </div>
             <table class="table table-bordered table-striped align-middle text-center">
                 <thead>
@@ -18,6 +18,7 @@
                     <th>Nombre</th>
                     <th>Email</th>
                     <th>Fecha de creacion</th>
+                    <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -29,14 +30,12 @@
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->created_at }}</td>
                         <td>
-                            <button class="btn btn-success btn-sm"><i class="bi bi-pencil"></i></button>
-                            <button class="btn btn-primary btn-sm"><i class="bi bi-eye"></i></button>
-                            <a href="{{ route('adminusuarios.delete', $user->id) }}"
+                            <a href="{{ route('adminusers.delete', $user->id) }}"
                                class="btn btn-danger btn-sm"
                                onclick="event.preventDefault(); document.getElementById('delete-form-{{ $user->id }}').submit();">
                                 Eliminar</i>
                             </a>
-                            <form method="POST" id="delete-form-{{ $user->id }}" action="{{ route('adminusuarios.delete', $user->id) }}" style="display: none;">
+                            <form method="POST" id="delete-form-{{ $user->id }}" action="{{ route('adminusers.delete', $user->id) }}" style="display: none;">
                                 @method('delete')
                                 @csrf
                             </form>
@@ -47,6 +46,8 @@
                 </tbody>
             </table>
         </div>
-    </div>
+            <div class="mt-4 d-flex justify-content-center">
+                {!! $users->links('pagination::bootstrap-5') !!}
+            </div>
     </div>
 @endsection

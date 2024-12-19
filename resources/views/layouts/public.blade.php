@@ -36,7 +36,7 @@
                     <form method="POST" id="logout" action="{{route('logout')}}">
                         @csrf
                     </form>
-                    <!-- Agregar más enlaces para usuarios autenticados aquí-->
+
                 @else
                     <li class="nav-item">
                     <li class="nav-item">

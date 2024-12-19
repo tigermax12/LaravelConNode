@@ -14,8 +14,12 @@ class AdminCategoriasController extends Controller
 {
     public function index(Request $request)
     {
-        $categorias = Categoria::paginate(10);
+        $categorias = Categoria::paginate(2);
         return view('admin.categorias.index', compact('categorias'));
+    }
+    public function create()
+    {
+        return view('admin.categorias.create');
     }
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
@@ -27,17 +31,20 @@ class AdminCategoriasController extends Controller
         $categorias = Categoria::create([
             'nombre' => $request->get('nombre')
         ]);
-        return redirect()->route('adminpeticiones.show', $categorias->id)
-            ->with('success', 'La petición se actualizó correctamente.');
-    }
-    public function show($id)
-    {
-        try{
-            $categorias = Peticione::query()->findOrFail($id);
-        } catch (\Exception $exception) {
-            return back()->withErrors($exception->getMessage())->withInput();
-        }
-        return view('admin.peticiones.show', compact('categorias'));
+        return redirect()->route('admincategorias.index', $categorias->id)
+            ->with('success', 'La categoria se creo correctamente.');
     }
 
+    public function delete($id){
+        try {
+            $categorias= Categoria::findOrFail($id);
+            if($categorias->peticiones->count() > 0){
+                return back()->withErrors(['error'=>'La categoria esta en peticiones creadas']);
+            }
+            $categorias->delete();
+            return back()->with(['success'=>'La categoria fue eliminada']);
+        } catch (\Exception $e) {
+            return back()->withErrors(['error'=>'La categoria no pudo ser eliminada']);
+        }
+    }
 }

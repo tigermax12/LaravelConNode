@@ -212,12 +212,19 @@ class PeticioneController extends Controller
         return $peticion;
     }
 
-    public function delete(Request $request, $id)
-    {
-        $peticion = Peticione::query()->findOrFail($id);
-        $peticion->firmas()->delete();
-        $peticion->file->delete();
-        $peticion->delete();
-        return $this->listMine($request);
+    public function delete(Request $request, $id){
+        try {
+            $peticiones = Peticione::findOrFail($id);
+            if ($peticiones->firmas()->count()>0) {
+                return back()->withError("No se puede eliminar una peticion firmada");
+            }
+                $peticiones->file->delete();
+
+            $peticiones->delete();
+            return $this->index($request);
+        } catch (\Exception $exception) {
+            return back()->withErrors($exception->getMessage());
+        }
     }
+
 }

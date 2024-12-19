@@ -13,16 +13,24 @@ class AdminPeticionesController extends Controller
 {
     public function index(Request $request)
     {
-        $peticiones = Peticione::paginate(10);
+        $peticiones = Peticione::paginate(2);
         return view('admin.peticiones.index', compact('peticiones'));
     }
 
     public function delete(Request $request, $id){
-        $peticion = Peticione::query()->findOrFail($id);
-        $peticion->firmas()->delete();
-        $peticion->file->delete();
-        $peticion->delete();
-        return $this->index($request);
+        try {
+            $peticiones = Peticione::findOrFail($id);
+            if ($peticiones->firmas()->count()>0) {
+                return back()->withError("No se puede eliminar una peticion firmada");
+            }
+
+            $peticiones->file->delete();
+
+            $peticiones->delete();
+            return $this->index($request);
+        } catch (\Exception $exception) {
+            return back()->withErrors($exception->getMessage());
+        }
     }
     public function show($id)
     {
@@ -149,9 +157,9 @@ class AdminPeticionesController extends Controller
     }
     public function cambiarEstado(Request $request, $id)
     {
-        $peticion = Peticione::query()->findOrFail($id);
-        $peticion->estado = 'aceptada';
-        $peticion->save();
+        $peticiones = Peticione::query()->findOrFail($id);
+        $peticiones->estado = 'aceptada';
+        $peticiones->save();
         return redirect()->back();
     }
 }

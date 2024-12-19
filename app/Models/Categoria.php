@@ -11,7 +11,7 @@ class Categoria extends Model
     protected $fillable = [
         'nombre',
     ];
-    public function peticione(){
+    public function peticiones(){
         return $this->hasMany(Peticione::class);
     }
 }

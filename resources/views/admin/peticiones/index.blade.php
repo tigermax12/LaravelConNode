@@ -2,7 +2,9 @@
 @section('content')
     <!-- Contenido principal -->
     <div class="flex-grow-1">
-
+        @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
         <div class="table-container">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4>Peticiones</h4>
@@ -34,7 +36,7 @@
 
                             <form method="POST" id="firma-id" action="{{ route('adminpeticiones.estado', $peticion->id) }}">
 
-                            <button type="submit">Subir</button>    @csrf
+                                <button type="submit">Completar</button>    @csrf
                                 @method('PUT')
                             </form>
                         @endif
@@ -55,8 +57,11 @@
                 @endforeach
                 <!-- Puedes duplicar filas como ejemplo -->
                 </tbody>
+
             </table>
         </div>
-    </div>
+        <div class="mt-4 d-flex justify-content-center">
+            {!! $peticiones->links('pagination::bootstrap-5') !!}
+        </div>
     </div>
 @endsection

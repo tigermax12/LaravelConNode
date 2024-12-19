@@ -42,6 +42,12 @@
             <a href="{{ route('adminpeticiones.index') }}" class="mb-2"><i class="bi bi-list-check"></i> Peticiones</a>
             <a href="{{ route('admincategorias.index') }}" class="mb-2"><i class="bi bi-tags"></i> Categorías</a>
             <a href="{{ route('adminusers.index') }}"><i class="bi bi-people"></i> Usuarios</a>
+            <a href="{{route('logout')}}" class="mb-2"
+               onclick="event.preventDefault();document.getElementById('logout').submit();">Cerrar sesión</a>
+            <form method="POST" id="logout" action="{{route('logout')}}">
+                @csrf
+            </form>
+
         </nav>
     </div>
     @yield('content')
