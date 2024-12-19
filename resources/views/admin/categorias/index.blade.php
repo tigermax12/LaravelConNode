@@ -7,7 +7,7 @@
         @endif
         <div class="table-container">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4>Usuarios</h4>
+                <h4>Categorias</h4>
                 <a href="#" class="btn btn-primary">New</a>
             </div>
             <table class="table table-bordered table-striped align-middle text-center">
@@ -16,27 +16,26 @@
                     <th>#</th>
                     <th>Id</th>
                     <th>Nombre</th>
-                    <th>Email</th>
                     <th>Fecha de creacion</th>
+                    <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($users as $user)
+                @foreach($categorias as $categoria)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $user->id }}</td>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>{{ $user->created_at }}</td>
+                        <td>{{ $categoria->id }}</td>
+                        <td>{{ $categoria->nombre }}</td>
+                        <td>{{ $categoria->created_at }}</td>
                         <td>
                             <button class="btn btn-success btn-sm"><i class="bi bi-pencil"></i></button>
                             <button class="btn btn-primary btn-sm"><i class="bi bi-eye"></i></button>
-                            <a href="{{ route('adminusuarios.delete', $user->id) }}"
+                            <a href="{{ route('admincategorias.delete', $categoria->id) }}"
                                class="btn btn-danger btn-sm"
-                               onclick="event.preventDefault(); document.getElementById('delete-form-{{ $user->id }}').submit();">
+                               onclick="event.preventDefault(); document.getElementById('delete-form-{{ $categoria->id }}').submit();">
                                 Eliminar</i>
                             </a>
-                            <form method="POST" id="delete-form-{{ $user->id }}" action="{{ route('adminusuarios.delete', $user->id) }}" style="display: none;">
+                            <form method="POST" id="delete-form-{{ $categoria->id }}" action="{{ route('admincategorias.delete', $categoria->id) }}" style="display: none;">
                                 @method('delete')
                                 @csrf
                             </form>
@@ -47,6 +46,5 @@
                 </tbody>
             </table>
         </div>
-    </div>
     </div>
 @endsection

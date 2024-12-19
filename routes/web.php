@@ -58,6 +58,11 @@ Route::put('admin/peticiones/estado/{id}', 'cambiarEstado')->name('adminpeticion
 });
 Route::middleware('admin')->controller(\App\Http\Controllers\Admin\AdminUsersController::class)->group(function () {
     Route::get('admin/users/index', 'index')->name('adminusers.index');
+    Route::delete('admin/usuarios/{id}', 'delete')->name('adminusuarios.delete');
+});
+Route::middleware('admin')->controller(\App\Http\Controllers\Admin\AdminCategoriasController::class)->group(function () {
+    Route::get('admin/categorias/index', 'index')->name('admincategorias.index');
+    Route::delete('admin/categorias/{id}', 'delete')->name('admincategorias.delete');
 });
 
 require __DIR__.'/auth.php';

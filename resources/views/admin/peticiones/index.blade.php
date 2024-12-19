@@ -31,13 +31,10 @@
                     <td>{{ $peticion->estado }}</td>
                     <td>
                         @if($peticion->estado=='pendiente')
-                            <a href="{{ route('adminpeticiones.estado', $peticion->id) }}"
-                               class="btn btn-warning btn-sm"
-                               onclick="event.preventDefault(); document.getElementById('firma-id').submit();">
-                                <i class="bi bi-check"></i>
-                            </a>
+
                             <form method="POST" id="firma-id" action="{{ route('adminpeticiones.estado', $peticion->id) }}">
-                                @csrf
+
+                            <button type="submit">Subir</button>    @csrf
                                 @method('PUT')
                             </form>
                         @endif
